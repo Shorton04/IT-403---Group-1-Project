@@ -1,6 +1,7 @@
 # IT-403---Group-1-Project
 TaskFlow a Project Management web-app using django framework
 
+
 TaskFlow is a collaborative project management web application designed to streamline task allocation, project tracking, and team collaboration. Built with Django, TaskFlow integrates essential features like user authentication, task scheduling, Gantt chart visualizations, and a Kanban board for efficient project handling.
 
 ---
