@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block content %}
+<div style="display: flex; justify-content: center; align-items: center; min-height: 80vh; background-color: #f4f5f7;">
+    <div style="background: white; padding: 30px; width: 100%; max-width: 500px; border-radius: 12px; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);">
+        <h2 style="text-align: center; font-family: 'Poppins', sans-serif; font-weight: 600; color: #333; margin-bottom: 20px;">Register Project Member</h2>
+        <form method="POST" style="display: flex; flex-direction: column; gap: 20px;">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+
+            <div style="display: flex; flex-direction: column; gap: 5px;">
+                <label for="id_username" style="font-weight: 500; color: #666; font-size: 14px;">{{ form.username.label }}</label>
+                {{ form.username }}
+                <small style="color: #ff5252;">{{ form.username.errors }}</small>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 5px;">
+                <label for="id_email" style="font-weight: 500; color: #666; font-size: 14px;">{{ form.email.label }}</label>
+                {{ form.email }}
+                <small style="color: #ff5252;">{{ form.email.errors }}</small>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 5px;">
+                <label for="id_password" style="font-weight: 500; color: #666; font-size: 14px;">{{ form.password.label }}</label>
+                {{ form.password }}
+                <small style="color: #ff5252;">{{ form.password.errors }}</small>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 5px;">
+                <label for="id_confirm_password" style="font-weight: 500; color: #666; font-size: 14px;">{{ form.confirm_password.label }}</label>
+                {{ form.confirm_password }}
+                <small style="color: #ff5252;">{{ form.confirm_password.errors }}</small>
+            </div>
+
+            <button type="submit" style="padding: 12px; background: linear-gradient(135deg, #5a7cff, #3465ff); border: none; border-radius: 8px; color: white; font-size: 16px; font-weight: 600; cursor: pointer; transition: background 0.3s;">
+                Register Member
+            </button>
+        </form>
+    </div>
+</div>
+
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        margin: 0;
+        background-color: #f4f5f7;
+    }
+
+    .input-field {
+        padding: 10px 15px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        font-size: 14px;
+        outline: none;
+        transition: border-color 0.3s;
+    }
+
+    .input-field:focus {
+        border-color: #3465ff;
+        box-shadow: 0 0 4px rgba(52, 101, 255, 0.3);
+    }
+
+    button:hover {
+        background: linear-gradient(135deg, #3465ff, #5a7cff);
+    }
+</style>
+{% endblock %}

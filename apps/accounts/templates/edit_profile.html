@@ -1,0 +1,155 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profile</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        h2 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        label {
+            font-weight: 600;
+            display: block;
+            margin: 10px 0 5px;
+            color: #555;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="file"] {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="file"]:focus {
+            border-color: #1abc9c;
+            outline: none;
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: #1abc9c;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #16a085;
+        }
+
+        .profile-picture {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .profile-picture img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #2c3e50;
+        }
+
+        .back-button {
+            display: inline-block;
+            margin-bottom: 20px;
+            text-decoration: none;
+            color: #2c3e50;
+            font-weight: bold;
+            padding: 8px 12px;
+            border-radius: 8px;
+            background: #ecf0f1;
+            transition: background-color 0.3s ease;
+        }
+
+        .back-button:hover {
+            background-color: #bdc3c7;
+        }
+        body {
+
+            background: linear-gradient(135deg, #6a11cb, #2575fc); /* Gradient background */
+
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <a href="{% url 'profile' %}" class="back-button">&#8592; Back to Profile</a>
+        <h2>Edit Profile</h2>
+        <div class="profile-picture">
+            {% if user.profile_picture %}
+            <img src="{{ user.profile_picture.url }}" alt="Profile Picture">
+            {% else %}
+            <img src="{% static 'images/default_profile.jpg' %}" alt="Default Profile Picture">
+            {% endif %}
+        </div>
+        <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+
+    <div>
+        {{ form.full_name.label_tag }}
+        {{ form.full_name }}
+        {{ form.full_name.errors }}
+    </div>
+
+    <div>
+        {{ form.email.label_tag }}
+        {{ form.email }}
+        {{ form.email.errors }}
+    </div>
+
+    <div>
+        {{ form.profile_picture.label_tag }}
+        {{ form.profile_picture }}
+        {{ form.profile_picture.errors }}
+    </div>
+
+    <button type="submit">Save Changes</button>
+</form>
+    </div>
+</body>
+
+</html>

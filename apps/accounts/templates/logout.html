@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logout Confirmation</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #6a11cb, #2575fc); /* Gradient background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #fff;
+            text-align: center;
+        }
+
+        .logout-card {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .logout-card h2 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .logout-card p {
+            margin-bottom: 25px;
+            color: #555;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+        .logout-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .confirm-button {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .confirm-button:hover {
+            background-color: #c82333;
+        }
+
+        .cancel-button {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .cancel-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="logout-card">
+        <h2>Confirm Logout</h2>
+        <p>Are you sure you want to log out?</p>
+        <div class="button-container">
+            <form method="POST" action="{% url 'login' %}">
+                {% csrf_token %}
+                <button type="submit" class="confirm-button">Yes, Logout</button>
+            </form>
+            <a href="{% url 'home' %}">
+                <button type="button" class="cancel-button">Cancel</button>
+            </a>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <style>
+        /* Basic styling for the registration form */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #000000;
+            text-align: center;
+        }
+
+        .register-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            margin: auto;
+        }
+
+        .register-card {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            width: 400px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .register-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus {
+            border-color: #6a11cb;
+            outline: none;
+        }
+
+        .form-group label {
+            font-size: 14px;
+            color: #666;
+        }
+
+        button.btn {
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            color: #fff;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 18px;
+            font-weight: bold;
+            transition: transform 0.2s ease, background 0.3s ease;
+        }
+
+        button.btn:hover {
+            background: linear-gradient(135deg, #2575fc, #6a11cb);
+            transform: scale(1.05);
+        }
+
+        .already-registered {
+            margin-top: 15px;
+            color: #2575fc;
+            font-size: 14px;
+            text-decoration: none;
+        }
+
+        .already-registered:hover {
+            text-decoration: underline;
+        }
+
+        .errorlist {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 8px;
+            background-color: #f8d7da;
+            color: #721c24;
+            list-style-type: none;
+        }
+
+        .errorlist li {
+            font-size: 14px;
+        }
+
+        @media (max-width: 480px) {
+            .register-card {
+                width: 90%;
+                padding: 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <div class="register-card">
+            <h1>Register</h1>
+
+            <!-- Display success or error messages -->
+            {% if messages %}
+                <div class="messages">
+                    {% for message in messages %}
+                        <div class="{{ message.tags }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <!-- Registration Form -->
+            <form method="post" action="">
+                {% csrf_token %}
+
+                <!-- Display form errors -->
+                {{ form.non_field_errors }}
+
+                <!-- Username Input -->
+                <div class="form-group">
+                    <label for="id_username">Username</label>
+                    {{ form.username }}
+                    {% for error in form.username.errors %}
+                        <ul class="errorlist"><li>{{ error }}</li></ul>
+                    {% endfor %}
+                </div>
+
+                <!-- Email Input -->
+                <div class="form-group">
+                    <label for="id_email">Email</label>
+                    {{ form.email }}
+                    {% for error in form.email.errors %}
+                        <ul class="errorlist"><li>{{ error }}</li></ul>
+                    {% endfor %}
+                </div>
+
+                <!-- Password Input -->
+                <div class="form-group">
+                    <label for="id_password1">Password</label>
+                    {{ form.password1 }}
+                    {% for error in form.password1.errors %}
+                        <ul class="errorlist"><li>{{ error }}</li></ul>
+                    {% endfor %}
+                </div>
+
+                <!-- Confirm Password Input -->
+                <div class="form-group">
+                    <label for="id_password2">Confirm Password</label>
+                    {{ form.password2 }}
+                    {% for error in form.password2.errors %}
+                        <ul class="errorlist"><li>{{ error }}</li></ul>
+                    {% endfor %}
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="btn">Register</button>
+            </form>
+
+            <!-- Already Registered Link -->
+            <p>
+                <a href="{% url 'login' %}" class="already-registered">
+                    Are you already registered? Click here to log in.
+                </a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>

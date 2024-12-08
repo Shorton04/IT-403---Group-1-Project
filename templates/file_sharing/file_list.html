@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<!-- templates/file_sharing/file_list.html -->
+
+<h1>My Files</h1>
+<ul>
+    {% for file in files %}
+        <li>
+            <a href="{{ file.file.url }}">{{ file.file.name }}</a> - {{ file.description }}
+            <small>Uploaded on {{ file.uploaded_at }}</small>
+        </li>
+    {% endfor %}
+</ul>
+<a href="{% url 'upload_file' %}">Upload New File</a>
+</body>
+</html>

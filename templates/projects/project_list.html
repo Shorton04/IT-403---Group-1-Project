@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<!-- templates/projects/project_list.html -->
+
+<h1>My Projects</h1>
+<ul>
+    {% for project in projects %}
+        <li><a href="{% url 'project_detail' project.pk %}">{{ project.name }}</a></li>
+    {% endfor %}
+</ul>
+</body>
+</html>

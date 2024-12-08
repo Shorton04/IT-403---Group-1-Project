@@ -1,0 +1,158 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 50px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .profile-card {
+            margin-bottom: 20px;
+        }
+
+        .profile-card img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 4px solid #007bff;
+            margin-bottom: 15px;
+        }
+
+        .profile-card h2 {
+            margin: 10px 0;
+            color: #007bff;
+            font-size: 24px;
+        }
+
+        .profile-card p {
+            margin: 5px 0;
+            color: #555;
+            font-size: 16px;
+        }
+        .container:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .primary-button {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .primary-button:hover {
+            background-color: #0056b3;
+        }
+
+        .secondary-button {
+            background-color: #28a745;
+            color: #fff;
+        }
+
+        .secondary-button:hover {
+            background-color: #218838;
+        }
+
+        .delete-button {
+            background-color: #dc3545;
+            color: #fff;
+        }
+
+        .delete-button:hover {
+            background-color: #c82333;
+        }
+
+        .home-button {
+            background-color: #6c757d;
+            color: #fff;
+        }
+
+        .home-button:hover {
+            background-color: #5a6268;
+        }
+
+        a {
+            text-decoration: none;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #6a11cb, #2575fc); /* Gradient background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #fff;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Profile Card -->
+        <div class="profile-card">
+            {% if user.profile_picture %}
+            <img src="{{ user.profile_picture.url }}" alt="Profile Picture">
+            {% else %}
+            <img src="{% static 'images/default_profile.jpg' %}" alt="Default Profile">
+            {% endif %}
+            <h2>{{ user.full_name }}</h2>
+            <p><strong>Email:</strong> {{ user.email }}</p>
+            <p><strong>Username:</strong> {{ user.username }}</p>
+            <p><strong>Role:</strong> {{ user.role|default:"Not assigned" }}</p>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="button-container">
+            <a href="{% url 'home' %}">
+                <button class="home-button">Home</button>
+            </a>
+            <a href="{% url 'edit_profile' %}">
+                <button class="primary-button">Edit Profile</button>
+            </a>
+            <a href="{% url 'change_password' %}">
+                <button class="secondary-button">Change Password</button>
+            </a>
+            <a href="{% url 'delete_account' %}">
+                <button class="delete-button">Delete Account</button>
+            </a>
+        </div>
+    </div>
+</body>
+
+</html>

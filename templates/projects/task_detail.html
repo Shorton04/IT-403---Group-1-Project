@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<!-- templates/projects/task_detail.html -->
+
+<h1>{{ task.name }}</h1>
+<p>{{ task.description }}</p>
+<p>Assigned to: {{ task.assigned_to.username }}</p>
+<p>Status: {% if task.completed %} Completed {% else %} Incomplete {% endif %}</p>
+</body>
+</html>

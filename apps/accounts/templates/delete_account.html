@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Account</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #6a11cb, #2575fc); /* Gradient background */
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 100px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h2 {
+            color: #dc3545;
+            margin-bottom: 20px;
+        }
+
+        p {
+            color: #6c757d;
+            margin-bottom: 30px;
+        }
+
+        form {
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button[type="submit"] {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #c82333;
+        }
+
+        a {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            text-decoration: none;
+            background-color: #6c757d;
+            color: white;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        a:hover {
+            background-color: #5a6268;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Are you sure you want to delete your account?</h2>
+        <p>This action is irreversible. Once your account is deleted, all your data will be permanently removed.</p>
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit">Yes, delete my account</button>
+        </form>
+        <a href="{% url 'profile' %}">Cancel</a>
+    </div>
+</body>
+
+</html>

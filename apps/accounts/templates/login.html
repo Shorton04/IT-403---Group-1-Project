@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        /* Reset some default styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #6a11cb, #2575fc); /* Gradient background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #fff;
+            text-align: center;
+        }
+
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+
+        .login-card {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            width: 360px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .login-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        form p {
+            margin-bottom: 10px;
+        }
+
+        button.btn {
+            background: linear-gradient(135deg, #6a11cb, #2575fc); /* Gradient button */
+            color: #fff;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 18px;
+            font-weight: bold;
+            transition: transform 0.2s ease, background 0.3s ease;
+        }
+
+        button.btn:hover {
+            background: linear-gradient(135deg, #2575fc, #6a11cb);
+            transform: scale(1.05);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus {
+            border-color: #6a11cb;
+            outline: none;
+        }
+
+        .form-group label {
+            font-size: 16px;
+            color: #666;
+        }
+
+        .forgot-password,
+        .register-link {
+            margin-top: 15px;
+            color: #2575fc;
+            font-size: 14px;
+            text-decoration: none;
+        }
+
+        .forgot-password:hover,
+        .register-link:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 480px) {
+            .login-card {
+                width: 90%;
+                padding: 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <h1>Welcome Back</h1>
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    {{ form.as_p }}  <!-- Render the form fields -->
+                </div>
+                <button type="submit" class="btn">Login</button>
+            </form>
+
+            <a href="{% url 'register' %}" class="register-link">Not registered? Sign up here</a>
+        </div>
+    </div>
+</body>
+</html>
