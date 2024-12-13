@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Details</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .project-card {
+            max-width: 800px;
+            width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: white;
+            overflow: hidden;
+        }
+        .project-header {
+            background-color: #007bff;
+            color: white;
+            padding: 20px;
+        }
+        .project-header h2 {
+            margin: 0;
+        }
+        .project-body {
+            padding: 20px;
+        }
+        .project-body p {
+            font-size: 16px;
+            line-height: 1.6;
+        }
+        .action-buttons a, .action-buttons button {
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 4px;
+            margin-right: 10px;
+        }
+        .action-buttons .btn-edit {
+            background-color: #ffc107;
+            color: black;
+        }
+        .action-buttons .btn-delete {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+
+{% extends 'base.html' %}
+
+{% block title %}Project Details{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-center align-items-center min-vh-100 bg-light">
+    <div class="project-card">
+        <div class="project-header">
+            <h2>{{ project.name }}</h2>
+        </div>
+        <div class="project-body">
+            <p>{{ project.description }}</p>
+            <p><strong>Deadline:</strong> {{ project.deadline }}</p>
+            <h5>Members:</h5>
+            <ul class="ps-3">
+                {% for member in project.members.all %}
+                    <li>{{ member.full_name|default:member.username }}</li>
+                {% endfor %}
+            </ul>
+            {% if user.role == 'Project Manager' %}
+            <div class="action-buttons mt-3">
+                <a href="{% url 'edit_project' project.id %}" class="btn-edit">Edit</a>
+                <form action="{% url 'delete_project' project.id %}" method="post" class="d-inline">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-delete">Delete</button>
+                </form>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+</body>
+</html>

@@ -51,9 +51,11 @@
             transition: background 0.3s ease;
         }
 
+
         .sidebar ul li:hover {
             background-color: rgba(255, 255, 255, 0.2);
         }
+
 
         .sidebar ul li a {
             color: white;
@@ -61,6 +63,11 @@
             font-size: 1rem;
             font-weight: 500;
             display: block;
+        }
+
+                .sidebar ul li.active {
+            color: white;
+            background-color: #1a51af;
         }
 
         .sidebar footer {
@@ -164,11 +171,11 @@
     <div class="sidebar">
         <h2>TaskFlow</h2>
         <ul>
-            <li><a href="{% url 'home' %}">Dashboard</a></li>
+            <li class="{% if request.path == '/dashboard' %}active{% endif %}"><a href="{% url 'home' %}">Dashboard</a></li>
             {% if user.role == 'Project Manager' %}
-            <li><a href="{% url 'member_list' %}">Member Management</a></li>
+            <li class="{% if request.path == '/member_list/' %}active{% endif %}"><a href="{% url 'member_list' %}">Member Management</a></li>
             {% endif %}
-            <li><a href="#">Projects</a></li>
+            <li class="{% if request.path == '/projects/' %}active{% endif %}"><a href="{% url 'project_list' %}">Projects</a></li>
             <li><a href="#">Tasks</a></li>
             <li><a href="#">Reports</a></li>
         </ul>
