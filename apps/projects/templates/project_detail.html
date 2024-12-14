@@ -45,6 +45,10 @@
             color: white;
             border: none;
         }
+        .action-buttons .btn-kanban {
+            background-color: #28a745;
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -61,6 +65,7 @@
         </div>
         <div class="project-body">
             <p>{{ project.description }}</p>
+            <p><strong>Created at:</strong> {{ project.created_at|date:"M d, Y" }}</p>
             <p><strong>Deadline:</strong> {{ project.deadline }}</p>
             <h5>Members:</h5>
             <ul class="ps-3">
@@ -68,15 +73,16 @@
                     <li>{{ member.full_name|default:member.username }}</li>
                 {% endfor %}
             </ul>
-            {% if user.role == 'Project Manager' %}
             <div class="action-buttons mt-3">
+                <a href="{% url 'kanban_board' project.id %}" class="btn-kanban">Tasks</a>
+                {% if user.role == 'Project Manager' %}
                 <a href="{% url 'edit_project' project.id %}" class="btn-edit">Edit</a>
                 <form action="{% url 'delete_project' project.id %}" method="post" class="d-inline">
                     {% csrf_token %}
                     <button type="submit" class="btn-delete">Delete</button>
                 </form>
+                {% endif %}
             </div>
-            {% endif %}
         </div>
     </div>
 </div>

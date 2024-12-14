@@ -27,7 +27,6 @@ urlpatterns = [
     path('files/', include('apps.file_sharing.urls')),
     path('projects/', include('apps.projects.urls')),
     path('notification/', include('apps.notifications.urls')),
-    path('kanban/', include('apps.kanban.urls')),
 ]
 
 if settings.DEBUG:

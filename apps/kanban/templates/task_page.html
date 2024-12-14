@@ -1,0 +1,167 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Task Management</h1>
+    {% if user.role == 'Project Manager' %}
+        <div class="d-flex justify-content-end mb-3">
+            <a href="{% url 'create_task' %}" class="btn btn-primary">Create New Task</a>
+        </div>
+    {% endif %}
+
+    <!-- Kanban Board -->
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-info text-white text-center">To Do</div>
+                <div class="card-body kanban-column" id="To Do">
+                    {% for task in tasks %}
+                        {% if task.status == "To Do" %}
+                            <div class="card mb-3 kanban-task shadow-sm" draggable="true" data-id="{{ task.id }}">
+                                <div class="card-body">
+                                    <h6 class="card-title">{{ task.name }}</h6>
+                                    <p class="card-text text-muted">
+                                        {{ task.description|truncatewords:10 }}
+                                    </p>
+                                    <span class="badge bg-primary">{{ task.priority|title }}</span>
+                                    <small class="text-muted d-block">Deadline: {{ task.deadline }}</small>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-warning text-white text-center">In Progress</div>
+                <div class="card-body kanban-column" id="In Progress">
+                    {% for task in tasks %}
+                        {% if task.status == "In Progress" %}
+                            <div class="card mb-3 kanban-task shadow-sm" draggable="true" data-id="{{ task.id }}">
+                                <div class="card-body">
+                                    <h6 class="card-title">{{ task.name }}</h6>
+                                    <p class="card-text text-muted">
+                                        {{ task.description|truncatewords:10 }}
+                                    </p>
+                                    <span class="badge bg-warning text-dark">{{ task.priority|title }}</span>
+                                    <small class="text-muted d-block">Deadline: {{ task.deadline }}</small>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-success text-white text-center">Done</div>
+                <div class="card-body kanban-column" id="Done">
+                    {% for task in tasks %}
+                        {% if task.status == "Done" %}
+                            <div class="card mb-3 kanban-task shadow-sm" draggable="true" data-id="{{ task.id }}">
+                                <div class="card-body">
+                                    <h6 class="card-title">{{ task.name }}</h6>
+                                    <p class="card-text text-muted">
+                                        {{ task.description|truncatewords:10 }}
+                                    </p>
+                                    <span class="badge bg-success">{{ task.priority|title }}</span>
+                                    <small class="text-muted d-block">Deadline: {{ task.deadline }}</small>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Task List Table -->
+    <div class="mt-5">
+        <h3 class="mb-3">Task List</h3>
+        <table class="table table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th>Priority</th>
+                    <th>Task Name</th>
+                    <th>Assigned Member</th>
+                    <th>Status</th>
+                    <th>Deadline</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for task in tasks %}
+                    <tr>
+                        <td>
+                            <span class="badge {% if task.priority == 'urgent' %}bg-danger{% elif task.priority == 'can_wait' %}bg-secondary{% else %}bg-primary{% endif %}">
+                                {{ task.priority|title }}
+                            </span>
+                        </td>
+                        <td>{{ task.name }}</td>
+                        <td>{% if task.assigned_to and task.assigned_to.full_name %}
+                        {{ task.assigned_to.full_name }}
+                        {% elif task.assigned_to %}
+                        {{ task.assigned_to.username }}
+                        {% else %}
+                        Unassigned
+                        {% endif %}</td>
+                        <td>{{ task.status }}</td>
+                        <td>{{ task.deadline }}</td>
+                        <td>
+                            {% if user.role == 'Project Manager' %}
+                                <a href="{% url 'edit_task' task.id %}" class="btn btn-sm btn-warning">Edit</a>
+                                <form action="{% url 'delete_task' task.id %}" method="post" style="display:inline;">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                </form>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const columns = document.querySelectorAll('.kanban-column');
+        let draggedTask = null;
+
+        document.addEventListener('dragstart', (e) => {
+            if (e.target.classList.contains('kanban-task')) {
+                draggedTask = e.target;
+            }
+        });
+
+        document.addEventListener('dragover', (e) => {
+            e.preventDefault();
+        });
+
+        document.addEventListener('drop', (e) => {
+            if (e.target.classList.contains('kanban-column') && draggedTask) {
+                e.target.appendChild(draggedTask);
+                const taskId = draggedTask.dataset.id;
+                const newStatus = e.target.id;
+
+                fetch("{% url 'update_task_status' %}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: JSON.stringify({ task_id: taskId, status: newStatus })
+                }).then(response => response.json())
+                  .then(data => {
+                      if (!data.success) {
+                          alert('Failed to update task status.');
+                      }
+                  });
+            }
+        });
+    });
+</script>
+{% endblock %}

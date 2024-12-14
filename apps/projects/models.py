@@ -1,7 +1,6 @@
 from django.db import models
 from django.conf import settings
 from django.utils.timezone import now
-
 from apps.accounts.models import CustomUser
 
 class Project(models.Model):
@@ -16,10 +15,25 @@ class Project(models.Model):
         return self.name
 
 class Task(models.Model):
+    PRIORITY_CHOICES = [
+        ('priority', 'Priority'),
+        ('urgent', 'Urgent'),
+        ('can_wait', 'Can Wait'),
+    ]
+    STATUS_CHOICES = [
+        ('to_do', 'To Do'),
+        ('in_progress', 'In Progress'),
+        ('done', 'Done'),
+    ]
+
     name = models.CharField(max_length=100)
     description = models.TextField()
     project = models.ForeignKey(Project, related_name='tasks', on_delete=models.CASCADE)
-    assigned_to = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    assigned_to = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
+    priority = models.CharField(max_length=20, choices=PRIORITY_CHOICES, default='priority')
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='to_do')
+    deadline = models.DateField(null=True, blank=True)
+    created_at = models.DateTimeField(default=now)  # New field
     completed = models.BooleanField(default=False)
 
     def __str__(self):

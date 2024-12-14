@@ -28,6 +28,7 @@
                     <h5 class="card-title text-primary">{{ project.name }}</h5>
                     <p class="card-text text-muted">{{ project.description|truncatewords:20 }}</p>
                     <p class="mt-auto">
+                        <strong>Created at:</strong> {{ project.created_at|date:"M d, Y" }}<br>
                         <strong>Deadline:</strong> {{ project.deadline|date:"M d, Y" }}<br>
                         <strong>Members:</strong>
                         {% for member in project.members.all %}
