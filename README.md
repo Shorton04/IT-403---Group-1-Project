@@ -106,12 +106,15 @@ TaskFlow is a collaborative project management web application designed to strea
 
 **Clone the repository:**
    ```bash
-   git clone https://github.com/Shorton04/IT-403---Group-1-Project
+   git clone -b master https://github.com/Shorton04/IT-403---Group-1-Project
    cd project_management
    pip install -r requirements.txt
    python manage.py migrate
-   Access the application at http://127.0.0.1:8000/login
+   Access the application at http://127.0.0.1:8000/
 ```
+Admin:
+TaskFlow
+TaskFlow123
 
 ## Contributing
 We welcome contributions! Please fork this repository and create a pull request with your changes. Ensure your code adheres to the project's coding standards.
