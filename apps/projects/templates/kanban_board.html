@@ -102,8 +102,20 @@
       margin-left: 5rem;
   }
 
-  .btn-primary:hover {
-    background: linear-gradient(90deg, #0056b3, #004085);
+  .action-buttons .btn-edit {
+    background-color: #d54646; /* Green color */
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease-in-out;
+    display: inline-block;
+    margin-top: 10px;
+  }
+
+  .action-buttons .btn-edit:hover {
+    background-color: #ff4800; /* Darker green on hover */
   }
 
   @media (max-width: 768px) {
@@ -131,6 +143,9 @@
           <p><i class="bi bi-person-fill"></i> {{ task.assigned_to.full_name|default:task.assigned_to.username }}</p>
           <p><i class="bi bi-flag-fill text-danger"></i> {{ task.get_priority_display }}</p>
           <p><i class="bi bi-calendar-event-fill text-info"></i> {{ task.deadline }}</p>
+          <div class="action-buttons mt-3">
+          <a href="{% url 'delete_task' task.id %}" class="btn-edit">Delete</a>
+            </div>
         </div>
         {% endfor %}
       </div>
@@ -145,6 +160,9 @@
           <p><i class="bi bi-person-fill"></i> {{ task.assigned_to.full_name|default:task.assigned_to.username }}</p>
           <p><i class="bi bi-flag-fill text-warning"></i> {{ task.get_priority_display }}</p>
           <p><i class="bi bi-calendar-event-fill text-info"></i> {{ task.deadline }}</p>
+          <div class="action-buttons mt-3">
+          <a href="{% url 'delete_task' task.id %}" class="btn-edit">Delete</a>
+            </div>
         </div>
         {% endfor %}
       </div>
@@ -159,6 +177,9 @@
           <p><i class="bi bi-person-fill"></i> {{ task.assigned_to.full_name|default:task.assigned_to.username }}</p>
           <p><i class="bi bi-flag-fill text-success"></i> {{ task.get_priority_display }}</p>
           <p><i class="bi bi-calendar-event-fill text-info"></i> {{ task.deadline }}</p>
+            <div class="action-buttons mt-3">
+          <a href="{% url 'delete_task' task.id %}" class="btn-edit">Delete</a>
+            </div>
         </div>
         {% endfor %}
       </div>

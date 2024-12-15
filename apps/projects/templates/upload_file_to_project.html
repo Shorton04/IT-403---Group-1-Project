@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="max-width: 600px; margin: 0 auto; background: linear-gradient(to right, #f093fb, #f5576c); box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); border-radius: 8px; padding: 32px; margin-top: 24px;">
+    <h2 style="font-size: 24px; font-weight: bold; color: white; margin-bottom: 24px; text-align: center;">Upload File to Project: {{ project.name }}</h2>
+
+    <form method="post" enctype="multipart/form-data" style="display: flex; flex-direction: column; align-items: center;">
+        {% csrf_token %}
+        <label for="file" style="cursor: pointer; display: flex; align-items: center; justify-content: center; width: 100%; background: rgba(255, 255, 255, 0.1); padding: 12px; border-radius: 9999px; transition: background 0.3s;">
+            <i class="fas fa-upload" style="color: white; margin-right: 8px;"></i>
+            <span style="color: white; font-weight: bold;">Choose a file</span>
+        </label>
+        <input type="file" id="file" name="file" style="display: none;">
+
+        <button type="submit" style="margin-top: 24px; display: inline-block; background: white; color: #f5576c; font-weight: bold; padding: 12px 24px; border-radius: 9999px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); text-decoration: none; transition: background 0.3s, color 0.3s;">
+            Upload
+        </button>
+    </form>
+
+    <div style="margin-top: 32px; text-align: center;">
+        <a href="{% url 'project_file_list' project.id %}" style="color: white; text-decoration: underline; transition: color 0.3s;">
+            Back to file list
+        </a>
+    </div>
+</div>
+{% endblock %}

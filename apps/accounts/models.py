@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 import uuid
+from django.conf import settings
 
 
 class CustomUser(AbstractUser):
@@ -20,3 +21,27 @@ class CustomUser(AbstractUser):
         if self.created_by:
             return f"{self.created_by.id}-{uuid.uuid4().hex[:8]}"
         return uuid.uuid4().hex[:8]
+
+
+class Notification(models.Model):
+    recipient = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='received_notifications'
+    )
+    sender = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='sent_notifications'
+    )
+    message = models.TextField()
+    is_read = models.BooleanField(default=False)  # Ensure this field exists
+    created_at = models.DateTimeField(auto_now_add=True)
+    notification_type = models.CharField(max_length=50)
+
+    def __str__(self):
+        return f"Notification for {self.recipient.username}: {self.message}"
+
+

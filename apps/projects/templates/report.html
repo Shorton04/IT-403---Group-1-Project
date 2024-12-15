@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="max-width: 1000px; margin: 0 auto; padding: 32px;">
+    <h2 style="font-size: 28px; font-weight: bold; color: #444; margin-bottom: 16px; text-align: center;">Project Report</h2>
+
+    <!-- Project Selection Dropdown -->
+    <select id="project-select" style="margin-bottom: 24px; padding: 8px; width: 100%; border-radius: 8px; border: 1px solid #ccc; font-size: 16px;" onchange="changeProject()">
+        <option value="">Select a project</option>
+        {% for project in projects %}
+        <option value="{{ project.id }}" {% if project.id|stringformat:"s" == selected_project_id %}selected{% endif %}>
+            {{ project.name }}
+        </option>
+        {% endfor %}
+    </select>
+
+    <!-- Pie Chart Container -->
+    <div id="pie-chart" style="margin-top: 24px; height: 500px; width: 100%; background: #f9f9f9; border-radius: 8px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);"></div>
+
+    <!-- Generate Report Button -->
+    <form method="get" style="margin-top: 24px; text-align: center;">
+        <input type="hidden" name="project" value="{{ selected_project_id }}">
+        <button type="submit" name="generate_report" value="true" style="padding: 10px 20px; font-size: 16px; border-radius: 8px; background-color: #5a67d8; color: white; border: none; cursor: pointer;">
+            Generate Excel Report
+        </button>
+    </form>
+
+    <script src="https://cdn.anychart.com/releases/8.10.0/js/anychart-bundle.min.js"></script>
+    <script>
+        function changeProject() {
+            const projectId = document.getElementById('project-select').value;
+            window.location.href = '?project=' + projectId;
+        }
+
+        anychart.onDocumentReady(function() {
+            const statusCounts = {{ status_counts|safe }};
+            const data = [
+                { x: "To Do", value: statusCounts.to_do },
+                { x: "In Progress", value: statusCounts.in_progress },
+                { x: "Done", value: statusCounts.done }
+            ];
+
+            const pieChart = anychart.pie();
+            pieChart.data(data);
+            pieChart.title("Task Status Distribution");
+            pieChart.container('pie-chart');
+            pieChart.draw();
+        });
+    </script>
+</div>
+{% endblock %}

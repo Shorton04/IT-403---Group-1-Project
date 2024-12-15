@@ -6,6 +6,22 @@ from django.contrib import messages
 from .forms import EditProfileForm, CustomPasswordChangeForm, EditMemberForm
 from apps.accounts.forms import ProjectMemberRegistrationForm
 from .models import CustomUser
+from .utils import notify_account_activity
+from .models import Notification
+
+
+@login_required
+def notifications_view(request):
+    # Fetch notifications for the logged-in user
+    notifications = request.user.received_notifications.all().order_by('-created_at')
+
+    # Debugging output
+    print("Number of notifications:", notifications.count())
+    for n in notifications:
+        print(n.message)
+
+    return render(request, 'notifications.html', {'notifications': notifications})
+
 
 @login_required
 def register_member_view(request):
@@ -49,7 +65,7 @@ def user_login(request):
         if form.is_valid():
             user = form.get_user()
             login(request, user)
-            return redirect('home')
+            return redirect('gantt_chart')
         else:
             messages.error(request, "Invalid email or password")
     else:
@@ -88,6 +104,14 @@ def edit_profile(request):
         if form.is_valid():
             form.save()
             messages.success(request, "Your profile has been updated successfully!")
+            # Notify the project manager about the profile update
+            project_manager = user.created_by  # Assuming 'created_by' is set to the project manager
+            if project_manager:
+                notify_account_activity(
+                    sender=user,
+                    recipient=project_manager,
+                    message=f"{user.username} has updated their profile."
+                )
             return redirect('profile')  # Replace with the correct URL name for the profile page
         else:
             messages.error(request, "Please correct the errors below.")
@@ -103,6 +127,7 @@ def change_password(request):
         if form.is_valid():
             form.save()
             update_session_auth_hash(request, form.user)
+            notify_account_activity(request.user, request.user.created_by, f"{request.user.username} changed their password")
             messages.success(request, 'Your password has been changed!')
             return redirect('profile')
     else:
@@ -113,6 +138,14 @@ def change_password(request):
 def delete_account(request):
     if request.method == 'POST':
         user = request.user
+        # Notify the project manager about the account deletion
+        project_manager = user.created_by  # Assuming 'created_by' is set to the project manager
+        if project_manager:
+            notify_account_activity(
+                sender=user,
+                recipient=project_manager,
+                message=f"{user.username} has deleted their account."
+            )
         user.delete()
         messages.success(request, 'Your account has been deleted.')
         return redirect('login')

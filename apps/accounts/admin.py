@@ -1,6 +1,17 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from .models import CustomUser
+from .models import Notification
+
+
+class NotificationAdmin(admin.ModelAdmin):
+    list_display = ('recipient', 'sender', 'message', 'is_read', 'created_at', 'notification_type')
+    list_filter = ('is_read', 'notification_type', 'created_at')
+    search_fields = ('message', 'recipient__username', 'sender__username')
+    readonly_fields = ('created_at',)
+
+
+admin.site.register(Notification, NotificationAdmin)
 
 
 class CustomUserAdmin(UserAdmin):

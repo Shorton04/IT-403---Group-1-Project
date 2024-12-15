@@ -49,6 +49,10 @@
             background-color: #28a745;
             color: white;
         }
+        .action-buttons .btn-file_list{
+            background-color: #1859c5;
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -75,9 +79,10 @@
             </ul>
             <div class="action-buttons mt-3">
                 <a href="{% url 'kanban_board' project.id %}" class="btn-kanban">Tasks</a>
+                <a href="{% url 'project_file_list' project.id %}" class="btn-file_list">Files</a>
+                <form action="{% url 'delete_project' project.id %}" method="post" class="d-inline">
                 {% if user.role == 'Project Manager' %}
                 <a href="{% url 'edit_project' project.id %}" class="btn-edit">Edit</a>
-                <form action="{% url 'delete_project' project.id %}" method="post" class="d-inline">
                     {% csrf_token %}
                     <button type="submit" class="btn-delete">Delete</button>
                 </form>

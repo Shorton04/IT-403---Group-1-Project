@@ -2,6 +2,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Other head elements -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}TaskFlow{% endblock %}</title>
@@ -233,7 +235,7 @@
                 <a href="{% url 'project_list' %}">Projects</a>
             </li>
             <li class="{% if request.path == '/projects/tasks/' %}active{% endif %}"><a href="{% url 'task_list' %}">Tasks</a></li>
-            <li><a href="#">Reports</a></li>
+            <li><a href="{% url 'project_report' %}">Reports</a></li>
         </ul>
         <footer>
             &copy; 2024 TaskFlow. All rights reserved.
@@ -244,7 +246,7 @@
         <div class="header">
             <div class="page-title">{% block page_title %}Welcome{% endblock %}</div>
             <div class="actions">
-                <a href="{% url 'home' %}" class="notification-icon">
+                <a href="{% url 'notifications' %}" class="notification-icon">
                     <i class="fas fa-bell"></i>
                 </a>
                 <div class="profile-dropdown">

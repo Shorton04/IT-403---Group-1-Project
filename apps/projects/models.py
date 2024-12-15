@@ -38,3 +38,13 @@ class Task(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class SharedFile(models.Model):
+    file = models.FileField(upload_to='shared_files/')
+    uploaded_by = models.ForeignKey(CustomUser, related_name='uploaded_files', on_delete=models.CASCADE)
+    project = models.ForeignKey(Project, related_name='shared_files', on_delete=models.CASCADE)
+    upload_date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.file.name

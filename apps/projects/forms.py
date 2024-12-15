@@ -2,6 +2,8 @@ from django import forms
 from .models import Project
 from apps.accounts.models import CustomUser
 from .models import Task
+from .models import SharedFile
+
 
 class TaskForm(forms.ModelForm):
     class Meta:
@@ -10,6 +12,15 @@ class TaskForm(forms.ModelForm):
         widgets = {
             'deadline': forms.DateInput(attrs={'type': 'date'}),
         }
+
+    def __init__(self, *args, **kwargs):
+        project = kwargs.pop('project', None)
+        super().__init__(*args, **kwargs)
+        if project:
+            # Filter project members who were created by the project manager
+            self.fields['assigned_to'].queryset = CustomUser.objects.filter(
+                created_by=project.manager, role='Project Manager'
+            )
 
 class ProjectForm(forms.ModelForm):
     members = forms.ModelMultipleChoiceField(
@@ -35,3 +46,8 @@ class ProjectForm(forms.ModelForm):
             )
         else:
             self.fields['members'].queryset = CustomUser.objects.none()
+
+class SharedFileForm(forms.ModelForm):
+    class Meta:
+        model = SharedFile
+        fields = ['file']

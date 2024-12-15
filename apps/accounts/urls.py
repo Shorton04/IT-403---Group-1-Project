@@ -15,6 +15,7 @@ urlpatterns = [
     path('member_list/', views.member_list, name='member_list'),
     path('edit_member/<int:user_id>/', views.edit_member, name='edit_member'),
     path('delete_member/<int:user_id>/', views.delete_member, name='delete_member'),
+    path('notifications/', views.notifications_view, name='notifications'),
 
 ]
 

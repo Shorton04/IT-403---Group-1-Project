@@ -1,6 +1,29 @@
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-success">Save</button>
-    <a href="{% url 'kanban_board' project.id %}" class="btn btn-secondary">Cancel</a>
-</form>
+{% extends 'base.html' %}
+
+{% block title %}
+Create Task
+{% endblock %}
+
+{% block content %}
+<div style="max-width: 600px; margin: 50px auto; background-color: #ffffff; border-radius: 12px; box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1); overflow: hidden; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+    <div style="background-color: #3b5998; color: #ffffff; padding: 20px; text-align: center; border-radius: 12px 12px 0 0;">
+        <h2>Create Task</h2>
+    </div>
+    <div style="padding: 20px;">
+        <form method="post">
+            {% csrf_token %}
+            <div style="margin-bottom: 15px;">
+                {{ form.as_p }}
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <button type="submit" style="background-color: #28a745; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-size: 16px;">
+                    Save
+                </button>
+                <a href="{% url 'kanban_board' project.id %}" style="background-color: #6c757d; color: white; text-decoration: none; padding: 10px 20px; border-radius: 8px; font-size: 16px; display: inline-block;">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
