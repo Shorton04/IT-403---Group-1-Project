@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Hard-Coded Gantt Chart - Project Management App
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="display-6 mb-4">Hard-Coded Gantt Chart</h1>
+
+    <div class="gantt-container">
+        <!-- Header Row for days -->
+        <div class="gantt-header">
+            <div class="gantt-cell">1</div>
+            <div class="gantt-cell">2</div>
+            <div class="gantt-cell">3</div>
+            <div class="gantt-cell">4</div>
+            <div class="gantt-cell">5</div>
+            <div class="gantt-cell">6</div>
+            <div class="gantt-cell">7</div>
+            <div class="gantt-cell">8</div>
+            <div class="gantt-cell">9</div>
+            <div class="gantt-cell">10</div>
+            <!-- Add more days as needed -->
+        </div>
+
+        <!-- Task Rows -->
+        <div class="gantt-row">
+            <div class="gantt-task" style="grid-column: 1 / span 3;">Task 1</div>
+        </div>
+        <div class="gantt-row">
+            <div class="gantt-task" style="grid-column: 4 / span 5;">Task 2</div>
+        </div>
+        <div class="gantt-row">
+            <div class="gantt-task" style="grid-column: 8 / span 2;">Task 3</div>
+        </div>
+        <!-- Add more tasks as needed -->
+    </div>
+</div>
+
+<style>
+    .gantt-container {
+        display: grid;
+        grid-template-columns: repeat(10, 30px); /* Adjust columns for more days */
+        gap: 1px;
+        background-color: #e0e0e0;
+        overflow-x: auto;
+    }
+
+    .gantt-header, .gantt-row {
+        display: contents;
+    }
+
+    .gantt-cell, .gantt-task {
+        padding: 5px;
+        text-align: center;
+        border: 1px solid #ddd;
+        background-color: #f8f9fa;
+        font-size: 12px;
+    }
+
+    .gantt-task {
+        background-color: #2196f3;
+        color: white;
+    }
+</style>
+{% endblock %}

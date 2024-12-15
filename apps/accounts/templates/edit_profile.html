@@ -122,7 +122,7 @@
             {% if user.profile_picture %}
             <img src="{{ user.profile_picture.url }}" alt="Profile Picture">
             {% else %}
-            <img src="{% static 'images/default_profile.jpg' %}" alt="Default Profile Picture">
+            <img src="{% static 'images/default-profile.jpg' %}" alt="Default Profile Picture">
             {% endif %}
         </div>
         <form method="POST" enctype="multipart/form-data">

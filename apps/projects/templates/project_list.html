@@ -39,17 +39,6 @@
                         <a href="{% url 'project_detail' project.id %}" class="btn btn-sm btn-info text-white">
                             <i class="bi bi-eye"></i> View Details
                         </a>
-                        {% if user.role == 'project_manager' and project.created_by == user %}
-                        <a href="{% url 'edit_project' project.id %}" class="btn btn-sm btn-warning">
-                            <i class="bi bi-pencil"></i> Edit
-                        </a>
-                        <form action="{% url 'delete_project' project.id %}" method="post" class="d-inline">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-sm btn-danger">
-                                <i class="bi bi-trash"></i> Delete
-                            </button>
-                        </form>
-                        {% endif %}
                     </div>
                 </div>
             </div>

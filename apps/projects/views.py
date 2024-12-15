@@ -68,7 +68,7 @@ def edit_project(request, project_id):
         form = ProjectForm(request.POST, instance=project, current_user=request.user)
         if form.is_valid():
             project = form.save()
-            form.save_m2m()  # Save many-to-many changes
+            form._save_m2m()  # Save many-to-many changes
             messages.success(request, "Project updated successfully!")
             return redirect('project_list')
         else:
@@ -120,26 +120,41 @@ def kanban_board(request, project_id):
 
 
 @csrf_exempt
-@login_required
 def update_task_status(request):
-    if request.method == "POST":
+    if request.method == 'POST':
         try:
-            task_id = request.POST.get("task_id")
-            new_status = request.POST.get("status")
+            # Parse the request body as JSON
+            data = json.loads(request.body)
+            task_id = data.get('task_id')
+            new_status = data.get('status')
 
-            task = Task.objects.get(id=task_id)
-            if new_status in ['to_do', 'in_progress', 'done']:
+            # Ensure the necessary data is available
+            if not task_id or not new_status:
+                return JsonResponse({'success': False, 'error': 'Missing task_id or status'}, status=400)
+
+            # Retrieve the task and update its status
+            if request.user.role == 'Project Manager':
+                task = Task.objects.get(id=task_id, project__created_by=request.user)
                 task.status = new_status
                 task.save()
-                messages.success(request, "Task status updated successfully!")
             else:
-                messages.error(request, "Invalid status.")
-        except Task.DoesNotExist:
-            messages.error(request, "Task not found.")
-        except Exception as e:
-            messages.error(request, f"An error occurred: {e}")
+                task = Task.objects.get(id=task_id, assigned_to=request.user)
+                task.status = new_status
+                task.save()
 
-    return redirect('kanban_board', project_id=task.project.id)
+            # Return a success response
+            return JsonResponse({'success': True})
+
+        except Task.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Task not found'}, status=404)
+
+        except json.JSONDecodeError:
+            return JsonResponse({'success': False, 'error': 'Invalid JSON data'}, status=400)
+
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)}, status=500)
+    else:
+        return JsonResponse({'success': False, 'error': 'Invalid request method'}, status=405)
 
 @login_required
 def create_task(request, project_id):
@@ -196,3 +211,48 @@ def delete_task(request, task_id):
         return redirect('kanban_board', project_id=project_id)
 
     return render(request, 'delete_task.html', {'task': task})
+
+
+@login_required
+def task_list(request):
+    if request.user.role == 'Project Manager':
+        tasks = Task.objects.filter(project__created_by=request.user).order_by('deadline')  # Order by deadline
+    else:
+        tasks = Task.objects.filter(assigned_to=request.user).order_by('deadline')  # Order by deadline
+
+    return render(request, 'task_list.html', {'tasks': tasks})
+
+@login_required
+def gantt_chart(request):
+    # Fetch projects based on user role
+    if request.user.role == 'Project Manager':
+        projects = Project.objects.filter(created_by=request.user).order_by('created_at')
+    else:
+        projects = Project.objects.filter(tasks__assigned_to=request.user).distinct().order_by('created_at')
+
+    # Determine the default project (oldest)
+    default_project = projects.first()
+
+    # Get selected project from request or default to the oldest
+    selected_project_id = request.GET.get('project', default_project.id)
+    selected_project = get_object_or_404(Project, id=selected_project_id)
+
+    # Fetch tasks for the selected project
+    tasks = Task.objects.filter(project=selected_project)
+
+    # Prepare data for Gantt chart
+    chart_data = []
+    for task in tasks:
+        chart_data.append({
+            'label': f"{task.name} ({task.assigned_to.get_full_name()})",
+            'start': task.created_at.isoformat(),
+            'end': task.deadline.isoformat(),
+            'project': task.project.name
+        })
+
+    return render(request, 'gantt.html', {
+        'chart_data': chart_data,
+        'projects': projects,
+        'selected_project': selected_project
+    })
+

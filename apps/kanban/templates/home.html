@@ -1,3 +1,71 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
+
+{% block title %}
+Gantt Chart - My Project Management App
+{% endblock %}
+
 {% block content %}
+<div class="container mt-5">
+    <h1 class="display-6 mb-4">Gantt Chart</h1>
+    <canvas id="ganttChart" style="max-height: 600px;"></canvas>
+</div>
+
+<script>
+    const ctx = document.getElementById('ganttChart').getContext('2d');
+    const chartData = {{ chart_data|safe }};
+
+    const datasets = chartData.map(task => ({
+        label: task.label,
+        data: [{
+            x: task.start,
+            x2: task.end,
+            y: task.project
+        }],
+        backgroundColor: 'rgba(54, 162, 235, 0.5)',
+        borderColor: 'rgba(54, 162, 235, 1)',
+        borderWidth: 1
+    }));
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            datasets: datasets
+        },
+        options: {
+            indexAxis: 'y',
+            scales: {
+                x: {
+                    type: 'time',
+                    time: {
+                        unit: 'day',
+                        tooltipFormat: 'MMM dd, yyyy'
+                    },
+                    title: {
+                        display: true,
+                        text: 'Timeline'
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Projects'
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const task = chartData[context.dataIndex];
+                            return `${task.label}: ${task.start} to ${task.end}`;
+                        }
+                    }
+                }
+            }
+        }
+    });
+</script>
 {% endblock %}
